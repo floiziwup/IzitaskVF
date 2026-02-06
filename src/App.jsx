@@ -72,6 +72,7 @@ const QUADRANTS = {
     headerColor: 'bg-white',
     accentColor: 'text-red-600',
     borderColor: 'border-red-200',
+    taskBg: 'bg-red-50 hover:bg-red-100 border-red-100',
     icon: AlertCircle,
     desc: 'Crises, deadlines immédiates'
   },
@@ -83,6 +84,7 @@ const QUADRANTS = {
     headerColor: 'bg-white',
     accentColor: 'text-blue-600',
     borderColor: 'border-blue-200',
+    taskBg: 'bg-blue-50 hover:bg-blue-100 border-blue-100',
     icon: Clock,
     desc: 'Stratégie, prévention'
   },
@@ -94,6 +96,7 @@ const QUADRANTS = {
     headerColor: 'bg-white',
     accentColor: 'text-amber-600',
     borderColor: 'border-amber-200',
+    taskBg: 'bg-amber-50 hover:bg-amber-100 border-amber-100',
     icon: ArrowRightCircle,
     desc: 'Interruptions, réunions'
   },
@@ -105,6 +108,7 @@ const QUADRANTS = {
     headerColor: 'bg-white',
     accentColor: 'text-slate-500',
     borderColor: 'border-slate-200',
+    taskBg: 'bg-slate-50 hover:bg-slate-100 border-slate-200',
     icon: Trash2,
     desc: 'Distractions'
   }
@@ -314,7 +318,7 @@ function TaskModal({ task, onClose, onSave }) {
               type="text" 
               value={title} 
               onChange={e => setTitle(e.target.value)}
-              className="w-full text-lg font-medium text-slate-800 border-b border-slate-200 focus:border-indigo-500 outline-none py-1 placeholder:text-slate-300 transition-colors"
+              className="w-full text-lg font-bold text-slate-800 bg-white border border-slate-200 rounded-lg px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none placeholder:text-slate-300 transition-colors"
               placeholder="Nom de la tâche..."
             />
           </div>
@@ -327,7 +331,7 @@ function TaskModal({ task, onClose, onSave }) {
             <textarea 
               value={desc} 
               onChange={e => setDesc(e.target.value)}
-              className="w-full p-3 bg-slate-50 rounded-lg text-sm text-slate-600 outline-none border border-transparent focus:border-indigo-200 focus:bg-white transition-all resize-none h-24"
+              className="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none h-32 leading-relaxed"
               placeholder="Ajouter des détails, contexte..."
             />
           </div>
@@ -341,7 +345,7 @@ function TaskModal({ task, onClose, onSave }) {
               type="date" 
               value={deadline} 
               onChange={e => setDeadline(e.target.value)}
-              className="text-sm p-2 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 text-slate-600 w-full sm:w-auto"
+              className="text-sm p-2 border border-slate-200 bg-white rounded-lg outline-none focus:border-indigo-500 text-slate-600 w-full sm:w-auto"
             />
           </div>
 
@@ -421,7 +425,7 @@ function DataManager({ currentUser, viewedUserId, currentView }) {
     return () => unsubscribe();
   }, [viewedUserId]);
 
-  const addTask = async (text, quadrantId) => {
+  const addTask = async (text, quadrantId, deadline) => {
     if (!text.trim()) return;
     const tasksRef = collection(db, 'artifacts', appId, 'public', 'data', 'team_tasks');
     await addDoc(tasksRef, {
@@ -430,6 +434,7 @@ function DataManager({ currentUser, viewedUserId, currentView }) {
       targetUserId: viewedUserId,
       createdBy: currentUser.uid,
       isCompleted: false,
+      deadline: deadline || null,
       createdAt: serverTimestamp()
     });
   };
@@ -485,15 +490,19 @@ function DataManager({ currentUser, viewedUserId, currentView }) {
   );
 }
 
-// --- Composant Quadrant (Raffiné) ---
+// --- Composant Quadrant (Avec Date Picker à la création) ---
 function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit }) {
   const [newItem, setNewItem] = useState('');
+  const [newDeadline, setNewDeadline] = useState('');
+  const [showDateInput, setShowDateInput] = useState(false);
   const Icon = config.icon;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAdd(newItem, config.id);
+    onAdd(newItem, config.id, newDeadline);
     setNewItem('');
+    setNewDeadline('');
+    setShowDateInput(false);
   };
 
   return (
@@ -526,15 +535,15 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit }) {
           <div 
             key={task.id} 
             onClick={() => onEdit(task)}
-            className={`group relative flex items-start gap-3 p-3 rounded-xl border border-transparent transition-all cursor-pointer ${
+            className={`group relative flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
               task.isCompleted 
-                ? 'bg-slate-50 opacity-50' 
-                : 'bg-white hover:bg-slate-50/80 hover:border-slate-100 hover:shadow-sm'
+                ? 'bg-slate-50 opacity-50 border-transparent' 
+                : `${config.taskBg} shadow-sm hover:shadow-md border`
             }`}
           >
             <button 
               onClick={(e) => onToggle(task, e)}
-              className={`mt-0.5 shrink-0 transition-colors ${task.isCompleted ? 'text-emerald-500' : 'text-slate-300 hover:text-emerald-500'}`}
+              className={`mt-0.5 shrink-0 transition-colors ${task.isCompleted ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-500'}`}
             >
               {task.isCompleted ? <CheckCircle2 size={18} /> : <div className="w-[18px] h-[18px] rounded-full border-[1.5px] border-current" />}
             </button>
@@ -546,24 +555,24 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit }) {
               
               <div className="flex items-center gap-3 mt-1.5">
                 {task.deadline && (
-                  <div className={`flex items-center gap-1 text-[10px] font-medium ${new Date(task.deadline) < new Date() && !task.isCompleted ? 'text-red-500' : 'text-slate-400'}`}>
+                  <div className={`flex items-center gap-1 text-[10px] font-medium ${new Date(task.deadline) < new Date() && !task.isCompleted ? 'text-red-500' : 'text-slate-500'}`}>
                     <CalendarIcon size={10} />
                     {formatDate(task.deadline)}
                   </div>
                 )}
                 {task.attachments?.length > 0 && (
-                  <div className="flex items-center gap-1 text-[10px] font-medium text-indigo-400">
+                  <div className="flex items-center gap-1 text-[10px] font-medium text-indigo-500">
                     <LinkIcon size={10} />
                     {task.attachments.length} doc{task.attachments.length > 1 ? 's' : ''}
                   </div>
                 )}
                 {task.description && (
-                   <FileText size={10} className="text-slate-300" />
+                   <FileText size={10} className="text-slate-400" />
                 )}
               </div>
             </div>
 
-            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity bg-white/80 backdrop-blur-sm rounded-lg p-0.5">
+            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity bg-white/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm">
                <button onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md">
                  <Edit2 size={12} />
                </button>
@@ -575,17 +584,40 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit }) {
         ))}
       </div>
 
-      {/* Input Minimaliste */}
+      {/* Input Minimaliste avec Date Picker */}
       <div className="p-3 border-t border-slate-50 bg-white">
-        <form onSubmit={handleSubmit} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-transparent focus-within:border-indigo-100 focus-within:bg-white focus-within:shadow-sm transition-all">
-          <Plus size={16} className="text-slate-400" />
-          <input
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            placeholder="Nouvelle tâche..."
-            className="flex-1 text-sm bg-transparent border-none focus:ring-0 placeholder:text-slate-400 outline-none text-slate-700"
-          />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-transparent focus-within:border-indigo-100 focus-within:bg-white focus-within:shadow-sm transition-all">
+            <Plus size={16} className="text-slate-400" />
+            <input
+              type="text"
+              value={newItem}
+              onChange={(e) => setNewItem(e.target.value)}
+              placeholder="Nouvelle tâche..."
+              className="flex-1 text-sm bg-transparent border-none focus:ring-0 placeholder:text-slate-400 outline-none text-slate-700"
+            />
+            <button 
+              type="button" 
+              onClick={() => setShowDateInput(!showDateInput)}
+              className={`p-1.5 rounded-md transition-colors ${showDateInput || newDeadline ? 'text-indigo-600 bg-indigo-50' : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-100'}`}
+              title="Ajouter une date limite"
+            >
+              <CalendarIcon size={14} />
+            </button>
+          </div>
+          
+          {/* Zone Date Picker qui s'affiche au clic */}
+          {showDateInput && (
+            <div className="flex items-center gap-2 px-1 animate-in slide-in-from-top-1 duration-200">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">Pour le :</span>
+              <input 
+                type="date" 
+                value={newDeadline} 
+                onChange={(e) => setNewDeadline(e.target.value)}
+                className="text-xs bg-slate-50 border border-slate-200 rounded px-2 py-1 outline-none focus:border-indigo-400 text-slate-600"
+              />
+            </div>
+          )}
         </form>
       </div>
     </div>
@@ -653,9 +685,8 @@ function CalendarView({ tasks, onToggle }) {
   );
 }
 
-// --- Login Screen (Mis à jour) ---
+// --- Login Screen (Google Uniquement) ---
 function LoginScreen({ onJoin, auth, user }) {
-  const [name, setName] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -674,17 +705,6 @@ function LoginScreen({ onJoin, auth, user }) {
     }
   };
 
-  const handleGuestLogin = async (e) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-    try {
-      const result = await signInAnonymously(auth);
-      onJoin(name, result.user.uid);
-    } catch (err) {
-      setError("Erreur de connexion invité.");
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white p-4 font-sans selection:bg-indigo-100">
       <div className="w-full max-w-sm">
@@ -699,29 +719,10 @@ function LoginScreen({ onJoin, auth, user }) {
         {error && <div className="mb-4 p-3 bg-red-50 text-red-600 text-xs rounded-lg text-center">{error}</div>}
         
         <div className="space-y-4">
-          <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-200 transition-all text-sm">
+          <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-200 transition-all text-sm shadow-sm hover:shadow-md">
             <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
             Continuer avec Google
           </button>
-
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-slate-100"></div>
-            <span className="flex-shrink mx-4 text-slate-300 text-[10px] uppercase font-bold tracking-wider">Ou</span>
-            <div className="flex-grow border-t border-slate-100"></div>
-          </div>
-
-          <form onSubmit={handleGuestLogin} className="flex gap-2">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 text-sm outline-none transition-all placeholder:text-slate-400 text-slate-800"
-              placeholder="Votre Prénom"
-            />
-            <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl transition-colors shadow-lg shadow-indigo-200">
-              <ArrowRightCircle size={20} />
-            </button>
-          </form>
         </div>
       </div>
     </div>
