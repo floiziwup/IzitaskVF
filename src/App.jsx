@@ -4,7 +4,7 @@ import {
   Calendar as CalendarIcon, ChevronLeft, ChevronRight, CalendarDays, LogOut, UserCircle, FileText, 
   Link as LinkIcon, X, Save, MoreHorizontal, Edit2, GripVertical, CalendarPlus, BookOpen, Search, 
   TestTube, Lock, Building2, Bold, Italic, Underline, List, ListOrdered, Check, 
-  AlignLeft, AlignCenter, AlignRight, AlignJustify, AlertTriangle, Send
+  AlignLeft, AlignCenter, AlignRight, AlignJustify, AlertTriangle, Send, ShieldCheck
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -30,6 +30,24 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const appId = 'izitask-19ac3';
+
+// --- CONFIGURATION ADMINISTRATEURS ---
+// Liste des emails autorisés à voir tous les espaces et gérer les docs publics
+const ADMIN_EMAILS = [
+  'florent.lahilla@iziwup.com',
+  'stanislas.hoareau@iziwup.com',
+  'jeanne.lemelinaire@iziwup.com'
+];
+
+// Fonction pour vérifier si un utilisateur est admin
+const isUserAdmin = (user) => {
+  if (!user) return false;
+  // Vérification par email (insensible à la casse)
+  if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) return true;
+  // Backdoor pour le mode Test (développement uniquement)
+  if (user.isAnonymous && user.displayName === 'Florent (Test)') return true;
+  return false;
+};
 
 // --- Constantes & Types ---
 const QUADRANTS = {
@@ -154,7 +172,7 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
   const [newLinkUrl, setNewLinkUrl] = useState('');
   const [newLinkName, setNewLinkName] = useState('');
   const [isCompleted, setIsCompleted] = useState(task.isCompleted || false);
-  const [delegateTo, setDelegateTo] = useState(''); // Pour la délégation
+  const [delegateTo, setDelegateTo] = useState(''); 
   const editorRef = useRef(null);
 
   const handleAddLink = (e) => {
@@ -179,7 +197,6 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
   const handleSubmit = () => {
     const contentToSave = editorRef.current ? editorRef.current.innerHTML : desc;
     
-    // Logique de délégation
     if (delegateTo) {
       onSave(task.id, { 
         text: title, 
@@ -191,7 +208,6 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
         quadrant: 'Q1'
       });
     } else {
-      // CORRECTION ICI : On passe task.quadrant pour ne pas le perdre lors de la création
       onSave(task.id, { 
         text: title, 
         description: contentToSave, 
@@ -237,7 +253,6 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
         </div>
         <div className="p-6 overflow-y-auto space-y-6">
           
-          {/* SECTION DÉLÉGATION (Visible uniquement si Quadrant = Q3 Délégué et pas nouvelle tâche) */}
           {task.quadrant === 'Q3' && !isNew && (
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 animate-in fade-in slide-in-from-top-2">
               <label className="block text-xs font-bold text-amber-800 uppercase tracking-wide mb-2 flex items-center gap-2">
@@ -548,9 +563,9 @@ function MeetingMinutesView({ currentUser, userProfile }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); 
   const editorRef = useRef(null);
 
-  const isFlorent = (currentUser?.email?.toLowerCase() === 'florent.lahilla@iziwup.com') || (userProfile?.displayName === 'Florent (Test)');
-  const canCreate = currentFolder === 'team' ? isFlorent : true;
-  const canModify = currentFolder === 'personal' ? true : (isFlorent || (selectedMinute && selectedMinute.createdBy === currentUser.uid));
+  const isAdmin = isUserAdmin(currentUser);
+  const canCreate = currentFolder === 'team' ? isAdmin : true;
+  const canModify = currentFolder === 'personal' ? true : (isAdmin || (selectedMinute && selectedMinute.createdBy === currentUser.uid));
 
   useEffect(() => {
     setSelectedMinute(null);
@@ -877,6 +892,9 @@ function MainApp() {
   const [currentView, setCurrentView] = useState('matrix'); 
   const [loading, setLoading] = useState(true);
 
+  // Vérification Admin
+  const isAdmin = isUserAdmin(user);
+
   useEffect(() => {
     const scriptId = 'tailwind-script';
     if (!document.getElementById(scriptId)) {
@@ -987,15 +1005,19 @@ function MainApp() {
               <button onClick={() => setCurrentView('minutes')} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${currentView === 'minutes' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}><BookOpen size={14} /> C.R.</button>
             </div>
             <div className="flex items-center gap-3">
-              <div className="relative group">
-                <select value={viewedUserId || ''} onChange={(e) => setViewedUserId(e.target.value)} className="appearance-none bg-transparent pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 cursor-pointer focus:outline-none transition-colors">
-                  <option value={user.uid}>Mon Espace</option>
-                  {allUsers.filter(u => u.id !== user.uid).map(u => (
-                    <option key={u.id} value={u.id}>Espace de {u.displayName}</option>
-                  ))}
-                </select>
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"><ChevronRight className="w-3 h-3 text-slate-400 rotate-90" /></div>
-              </div>
+              {isAdmin ? (
+                <div className="relative group">
+                  <select value={viewedUserId || ''} onChange={(e) => setViewedUserId(e.target.value)} className="appearance-none bg-transparent pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 cursor-pointer focus:outline-none transition-colors">
+                    <option value={user.uid}>Mon Espace</option>
+                    {allUsers.filter(u => u.id !== user.uid).map(u => (
+                      <option key={u.id} value={u.id}>Espace de {u.displayName}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"><ChevronRight className="w-3 h-3 text-slate-400 rotate-90" /></div>
+                </div>
+              ) : (
+                <div className="text-sm font-semibold text-slate-600 px-3 py-1.5">Mon Espace</div>
+              )}
               <div className="h-7 w-7 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-[10px] border border-indigo-100">{myProfile.displayName.substring(0, 2).toUpperCase()}</div>
               <button onClick={handleLogout} className="text-slate-300 hover:text-red-500 transition-colors" title="Déconnexion"><LogOut size={16} /></button>
             </div>
