@@ -40,34 +40,66 @@ const ADMIN_EMAILS = [
 
 const isUserAdmin = (user) => {
   if (!user) return false;
-  // Déblocage des droits d'admin pour le mode TEST
   if (user.isAnonymous) return true; 
   if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) return true;
   return false;
 };
 
 // --- Constantes & Types ---
+// Mise à jour des couleurs pour le mode sombre (dark:)
 const QUADRANTS = {
-  Q1: { id: 'Q1', title: 'À FAIRE', subtitle: 'Urgent & Important', color: 'bg-red-50/50', headerColor: 'bg-white', accentColor: 'text-red-600', borderColor: 'border-red-200', taskBg: 'bg-red-50 hover:bg-red-100 border-red-100', icon: AlertCircle, desc: 'Crises, deadlines immédiates' },
-  Q2: { id: 'Q2', title: 'PLANIFIER', subtitle: 'Important, Pas Urgent', color: 'bg-blue-50/50', headerColor: 'bg-white', accentColor: 'text-blue-600', borderColor: 'border-blue-200', taskBg: 'bg-blue-50 hover:bg-blue-100 border-blue-100', icon: Clock, desc: 'Stratégie, prévention' },
-  Q3: { id: 'Q3', title: 'DÉLÉGUER', subtitle: 'Urgent, Pas Important', color: 'bg-amber-50/50', headerColor: 'bg-white', accentColor: 'text-amber-600', borderColor: 'border-amber-200', taskBg: 'bg-amber-50 hover:bg-amber-100 border-amber-100', icon: ArrowRightCircle, desc: 'Interruptions, réunions' },
-  Q4: { id: 'Q4', title: 'ÉLIMINER', subtitle: 'Ni Urgent, Ni Important', color: 'bg-slate-50/50', headerColor: 'bg-white', accentColor: 'text-slate-500', borderColor: 'border-slate-200', taskBg: 'bg-slate-50 hover:bg-slate-100 border-slate-200', icon: Trash2, desc: 'Distractions' }
+  Q1: { 
+    id: 'Q1', title: 'À FAIRE', subtitle: 'Urgent & Important', 
+    color: 'bg-red-50/50 dark:bg-red-900/20', 
+    headerColor: 'bg-white dark:bg-slate-800', 
+    accentColor: 'text-red-600 dark:text-red-400', 
+    borderColor: 'border-red-200 dark:border-red-900', 
+    taskBg: 'bg-red-50 hover:bg-red-100 border-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:border-red-800', 
+    icon: AlertCircle, desc: 'Crises, deadlines immédiates' 
+  },
+  Q2: { 
+    id: 'Q2', title: 'PLANIFIER', subtitle: 'Important, Pas Urgent', 
+    color: 'bg-blue-50/50 dark:bg-blue-900/20', 
+    headerColor: 'bg-white dark:bg-slate-800', 
+    accentColor: 'text-blue-600 dark:text-blue-400', 
+    borderColor: 'border-blue-200 dark:border-blue-900', 
+    taskBg: 'bg-blue-50 hover:bg-blue-100 border-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:border-blue-800', 
+    icon: Clock, desc: 'Stratégie, prévention' 
+  },
+  Q3: { 
+    id: 'Q3', title: 'DÉLÉGUER', subtitle: 'Urgent, Pas Important', 
+    color: 'bg-amber-50/50 dark:bg-amber-900/20', 
+    headerColor: 'bg-white dark:bg-slate-800', 
+    accentColor: 'text-amber-600 dark:text-amber-400', 
+    borderColor: 'border-amber-200 dark:border-amber-900', 
+    taskBg: 'bg-amber-50 hover:bg-amber-100 border-amber-100 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:border-amber-800', 
+    icon: ArrowRightCircle, desc: 'Interruptions, réunions' 
+  },
+  Q4: { 
+    id: 'Q4', title: 'ÉLIMINER', subtitle: 'Ni Urgent, Ni Important', 
+    color: 'bg-slate-50/50 dark:bg-slate-800/30', 
+    headerColor: 'bg-white dark:bg-slate-800', 
+    accentColor: 'text-slate-500 dark:text-slate-400', 
+    borderColor: 'border-slate-200 dark:border-slate-700', 
+    taskBg: 'bg-slate-50 hover:bg-slate-100 border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-slate-600', 
+    icon: Trash2, desc: 'Distractions' 
+  }
 };
 
 const DEFAULT_KANBAN_COLUMNS = [
-  { id: 'todo', title: 'À FAIRE', color: 'bg-slate-100', borderColor: 'border-slate-200', accentColor: 'text-slate-600' },
-  { id: 'doing', title: 'EN COURS', color: 'bg-blue-50', borderColor: 'border-blue-200', accentColor: 'text-blue-600' },
-  { id: 'done', title: 'TERMINÉ', color: 'bg-emerald-50', borderColor: 'border-emerald-200', accentColor: 'text-emerald-600' }
+  { id: 'todo', title: 'À FAIRE', color: 'bg-slate-100 dark:bg-slate-800', borderColor: 'border-slate-200 dark:border-slate-700', accentColor: 'text-slate-600 dark:text-slate-300' },
+  { id: 'doing', title: 'EN COURS', color: 'bg-blue-50 dark:bg-blue-900/30', borderColor: 'border-blue-200 dark:border-blue-800', accentColor: 'text-blue-600 dark:text-blue-400' },
+  { id: 'done', title: 'TERMINÉ', color: 'bg-emerald-50 dark:bg-emerald-900/30', borderColor: 'border-emerald-200 dark:border-emerald-800', accentColor: 'text-emerald-600 dark:text-emerald-400' }
 ];
 
 const COLOR_PALETTES = [
-  { id: 'slate', color: 'bg-slate-100', borderColor: 'border-slate-200', accentColor: 'text-slate-600' },
-  { id: 'blue', color: 'bg-blue-50', borderColor: 'border-blue-200', accentColor: 'text-blue-600' },
-  { id: 'emerald', color: 'bg-emerald-50', borderColor: 'border-emerald-200', accentColor: 'text-emerald-600' },
-  { id: 'red', color: 'bg-red-50', borderColor: 'border-red-200', accentColor: 'text-red-600' },
-  { id: 'amber', color: 'bg-amber-50', borderColor: 'border-amber-200', accentColor: 'text-amber-600' },
-  { id: 'purple', color: 'bg-purple-50', borderColor: 'border-purple-200', accentColor: 'text-purple-600' },
-  { id: 'pink', color: 'bg-pink-50', borderColor: 'border-pink-200', accentColor: 'text-pink-600' },
+  { id: 'slate', color: 'bg-slate-100 dark:bg-slate-800', borderColor: 'border-slate-200 dark:border-slate-700', accentColor: 'text-slate-600 dark:text-slate-300' },
+  { id: 'blue', color: 'bg-blue-50 dark:bg-blue-900/30', borderColor: 'border-blue-200 dark:border-blue-800', accentColor: 'text-blue-600 dark:text-blue-400' },
+  { id: 'emerald', color: 'bg-emerald-50 dark:bg-emerald-900/30', borderColor: 'border-emerald-200 dark:border-emerald-800', accentColor: 'text-emerald-600 dark:text-emerald-400' },
+  { id: 'red', color: 'bg-red-50 dark:bg-red-900/30', borderColor: 'border-red-200 dark:border-red-800', accentColor: 'text-red-600 dark:text-red-400' },
+  { id: 'amber', color: 'bg-amber-50 dark:bg-amber-900/30', borderColor: 'border-amber-200 dark:border-amber-800', accentColor: 'text-amber-600 dark:text-amber-400' },
+  { id: 'purple', color: 'bg-purple-50 dark:bg-purple-900/30', borderColor: 'border-purple-200 dark:border-purple-800', accentColor: 'text-purple-600 dark:text-purple-400' },
+  { id: 'pink', color: 'bg-pink-50 dark:bg-pink-900/30', borderColor: 'border-pink-200 dark:border-pink-800', accentColor: 'text-pink-600 dark:text-pink-400' },
 ];
 
 // --- Helpers ---
@@ -102,18 +134,18 @@ const execCmd = (cmd) => {
 // 1. Barre d'outils Éditeur
 function EditorToolbar() {
   return (
-    <div className="flex gap-1 p-1.5 bg-slate-50 border-b border-slate-200 flex-wrap">
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('bold'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Gras"><Bold size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('italic'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Italique"><Italic size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('underline'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Souligné"><Underline size={14} /></button>
-      <div className="w-px bg-slate-300 mx-1 h-3 self-center"></div>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyLeft'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Gauche"><AlignLeft size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyCenter'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Centrer"><AlignCenter size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyRight'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Droite"><AlignRight size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyFull'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Justifier"><AlignJustify size={14} /></button>
-      <div className="w-px bg-slate-300 mx-1 h-3 self-center"></div>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('insertUnorderedList'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Puces"><List size={14} /></button>
-      <button onMouseDown={(e) => { e.preventDefault(); execCmd('insertOrderedList'); }} className="p-1 text-slate-600 hover:bg-white hover:text-indigo-600 rounded transition-colors" title="Numéros"><ListOrdered size={14} /></button>
+    <div className="flex gap-1 p-1.5 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 flex-wrap">
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('bold'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Gras"><Bold size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('italic'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Italique"><Italic size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('underline'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Souligné"><Underline size={14} /></button>
+      <div className="w-px bg-slate-300 dark:bg-slate-700 mx-1 h-3 self-center"></div>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyLeft'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Gauche"><AlignLeft size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyCenter'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Centrer"><AlignCenter size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyRight'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Droite"><AlignRight size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('justifyFull'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Justifier"><AlignJustify size={14} /></button>
+      <div className="w-px bg-slate-300 dark:bg-slate-700 mx-1 h-3 self-center"></div>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('insertUnorderedList'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Puces"><List size={14} /></button>
+      <button onMouseDown={(e) => { e.preventDefault(); execCmd('insertOrderedList'); }} className="p-1 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Numéros"><ListOrdered size={14} /></button>
     </div>
   );
 }
@@ -158,21 +190,24 @@ function LoginScreen({ onJoin, auth, user, externalError }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white p-4 font-sans selection:bg-indigo-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-950 p-4 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900">
       <div className="w-full max-w-sm">
-        <div className="flex justify-center mb-8"><div className="bg-indigo-600 p-3 rounded-xl shadow-lg shadow-indigo-200"><Zap className="w-8 h-8 text-white fill-current" /></div></div>
-        <h1 className="text-2xl font-bold text-center text-slate-900 mb-2">Bienvenue sur Izitask</h1>
-        <p className="text-center text-slate-500 mb-10 text-sm">L'outil de productivité de votre équipe.</p>
-        {error && <div className="mb-4 p-3 bg-red-50 text-red-600 text-xs rounded-lg text-center border border-red-100 font-medium">{error}</div>}
+        <div className="flex justify-center mb-8">
+           {/* LOGO */}
+           <img src="https://static.wixstatic.com/media/cc17fd_d3286f978f6a47dcb202b3eeb3eb1419~mv2.png" alt="Logo IZIWUP" className="h-16 w-auto object-contain" />
+        </div>
+        <h1 className="text-2xl font-bold text-center text-slate-900 dark:text-white mb-2">Bienvenue sur Izitask</h1>
+        <p className="text-center text-slate-500 dark:text-slate-400 mb-10 text-sm">L'outil de productivité de votre équipe.</p>
+        {error && <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-lg text-center border border-red-100 dark:border-red-900 font-medium">{error}</div>}
         <div className="space-y-4">
-          <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-200 transition-all text-sm shadow-sm hover:shadow-md">
+          <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white font-semibold py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 transition-all text-sm shadow-sm hover:shadow-md">
             <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
             Continuer avec Google
           </button>
           {showTestLogin && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="relative flex py-2 items-center"><div className="flex-grow border-t border-slate-100"></div><span className="flex-shrink mx-4 text-slate-300 text-[10px] uppercase font-bold tracking-wider">Mode Secours</span><div className="flex-grow border-t border-slate-100"></div></div>
-              <button onClick={handleTestLogin} className="w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium py-2 px-4 rounded-xl border border-slate-200 border-dashed transition-all text-xs"><TestTube size={14} /> Connexion Test (Aperçu)</button>
+              <div className="relative flex py-2 items-center"><div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div><span className="flex-shrink mx-4 text-slate-300 dark:text-slate-600 text-[10px] uppercase font-bold tracking-wider">Mode Secours</span><div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div></div>
+              <button onClick={handleTestLogin} className="w-full flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 border-dashed transition-all text-xs"><TestTube size={14} /> Connexion Test (Aperçu)</button>
             </div>
           )}
         </div>
@@ -257,31 +292,31 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-5 border-b border-slate-50">
-          <h3 className="font-bold text-slate-800 text-lg">{isNew ? "Nouvelle tâche" : "Détails de la tâche"}</h3>
+      <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-5 border-b border-slate-50 dark:border-slate-800">
+          <h3 className="font-bold text-slate-800 dark:text-white text-lg">{isNew ? "Nouvelle tâche" : "Détails de la tâche"}</h3>
           <div className="flex gap-2">
              {!isNew && (
-                <button onClick={handleToggleComplete} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${isCompleted ? 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'}`}>
+                <button onClick={handleToggleComplete} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${isCompleted ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
                   {isCompleted ? <Check size={14} /> : <div className="w-3.5 h-3.5 border-2 border-current rounded-full" />}
                   {isCompleted ? 'Terminée' : 'À faire'}
                 </button>
              )}
-             <button onClick={onClose} className="text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 p-1.5 rounded-full transition-colors"><X size={18} /></button>
+             <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 p-1.5 rounded-full transition-colors"><X size={18} /></button>
           </div>
         </div>
         <div className="p-6 overflow-y-auto space-y-6">
           
           {task.quadrant === 'Q3' && !isNew && (
-            <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 animate-in fade-in slide-in-from-top-2">
-              <label className="block text-xs font-bold text-amber-800 uppercase tracking-wide mb-2 flex items-center gap-2">
+            <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-100 dark:border-amber-800 animate-in fade-in slide-in-from-top-2">
+              <label className="block text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wide mb-2 flex items-center gap-2">
                 <ArrowRightCircle size={14} /> Déléguer cette tâche à :
               </label>
               <div className="flex gap-2">
                 <select 
                   value={delegateTo}
                   onChange={(e) => setDelegateTo(e.target.value)}
-                  className="flex-1 text-sm border-amber-200 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-amber-200 bg-white"
+                  className="flex-1 text-sm border-amber-200 dark:border-amber-800 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-amber-200 bg-white dark:bg-slate-900 dark:text-white"
                 >
                   <option value="">-- Choisir un membre --</option>
                   {allUsers.filter(u => u.id !== task.targetUserId).map(u => (
@@ -297,24 +332,24 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
                    </button>
                 )}
               </div>
-              <p className="text-[10px] text-amber-600 mt-2 italic">
+              <p className="text-[10px] text-amber-600 dark:text-amber-500 mt-2 italic">
                 * La tâche sera déplacée dans la colonne "À FAIRE" de cette personne.
               </p>
             </div>
           )}
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Titre</label>
-            <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full text-lg font-bold text-slate-800 bg-white border border-slate-200 rounded-lg px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none" placeholder="Nom de la tâche..." autoFocus />
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Titre</label>
+            <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full text-lg font-bold text-slate-800 dark:text-white bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none" placeholder="Nom de la tâche..." autoFocus />
           </div>
           
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-2"><FileText size={14} /> Description</label>
-            <div className="border border-slate-200 rounded-lg overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all bg-white">
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center gap-2"><FileText size={14} /> Description</label>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all bg-white dark:bg-slate-950">
                 <EditorToolbar />
                 <div
                   ref={editorRef}
-                  className="rich-text w-full p-3 text-sm text-slate-700 outline-none min-h-[8rem] max-h-[16rem] overflow-y-auto resize-y"
+                  className="rich-text w-full p-3 text-sm text-slate-700 dark:text-slate-200 outline-none min-h-[8rem] max-h-[16rem] overflow-y-auto resize-y"
                   contentEditable
                   suppressContentEditableWarning
                   onInput={(e) => setDesc(e.currentTarget.innerHTML)}
@@ -324,34 +359,34 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-2"><CalendarIcon size={14} /> Échéance</label>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center gap-2"><CalendarIcon size={14} /> Échéance</label>
             <div className="flex gap-2">
-              <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="text-sm p-2 border border-slate-200 bg-white rounded-lg outline-none focus:border-indigo-500 text-slate-600 w-full sm:w-auto" />
-              {deadline && !isNew && <button onClick={handleAddToCalendar} className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-100"><CalendarPlus size={14} /> RDV 9h</button>}
+              <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="text-sm p-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 rounded-lg outline-none focus:border-indigo-500 text-slate-600 dark:text-white w-full sm:w-auto" />
+              {deadline && !isNew && <button onClick={handleAddToCalendar} className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg transition-colors border border-indigo-100 dark:border-indigo-800"><CalendarPlus size={14} /> RDV 9h</button>}
             </div>
           </div>
           <div className="space-y-3">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-2"><LinkIcon size={14} /> Documents & Liens</label>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center gap-2"><LinkIcon size={14} /> Documents & Liens</label>
             {links.length > 0 && (
               <div className="space-y-2 mb-3">
                 {links.map((link, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-indigo-50/50 p-2 rounded-lg border border-indigo-100 group">
-                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-600 font-medium hover:underline truncate flex-1">{link.name}</a>
-                    <button onClick={() => removeLink(idx)} className="text-indigo-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all px-2"><X size={14} /></button>
+                  <div key={idx} className="flex items-center justify-between bg-indigo-50/50 dark:bg-indigo-900/20 p-2 rounded-lg border border-indigo-100 dark:border-indigo-900">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-600 dark:text-indigo-400 font-medium hover:underline truncate flex-1">{link.name}</a>
+                    <button onClick={() => removeLink(idx)} className="text-indigo-300 hover:text-red-500 dark:hover:text-red-400 px-2"><X size={14} /></button>
                   </div>
                 ))}
               </div>
             )}
-            <div className="flex flex-col sm:flex-row gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
-              <input type="text" placeholder="Nom du fichier..." value={newLinkName} onChange={e => setNewLinkName(e.target.value)} className="bg-white text-xs p-2 rounded border border-slate-200 outline-none flex-1" />
-              <input type="url" placeholder="https://..." value={newLinkUrl} onChange={e => setNewLinkUrl(e.target.value)} className="bg-white text-xs p-2 rounded border border-slate-200 outline-none flex-[2]" />
+            <div className="flex flex-col sm:flex-row gap-2 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
+              <input type="text" placeholder="Nom du fichier..." value={newLinkName} onChange={e => setNewLinkName(e.target.value)} className="bg-white dark:bg-slate-900 text-xs p-2 rounded border border-slate-200 dark:border-slate-700 outline-none flex-1 dark:text-white" />
+              <input type="url" placeholder="https://..." value={newLinkUrl} onChange={e => setNewLinkUrl(e.target.value)} className="bg-white dark:bg-slate-900 text-xs p-2 rounded border border-slate-200 dark:border-slate-700 outline-none flex-[2] dark:text-white" />
               <button onClick={handleAddLink} className="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded transition-colors text-xs font-bold">Ajouter</button>
             </div>
           </div>
         </div>
-        <div className="p-5 border-t border-slate-50 flex justify-end gap-3 bg-slate-50/50 rounded-b-2xl">
-          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-white rounded-lg transition-colors border border-transparent hover:border-slate-200">Annuler</button>
-          <button onClick={handleSubmit} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all flex items-center gap-2"><Save size={16} /> Enregistrer</button>
+        <div className="p-5 border-t border-slate-50 dark:border-slate-800 flex justify-end gap-3 bg-slate-50/50 dark:bg-slate-800/30 rounded-b-2xl">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">Annuler</button>
+          <button onClick={handleSubmit} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 dark:shadow-none transition-all flex items-center gap-2"><Save size={16} /> Enregistrer</button>
         </div>
       </div>
     </div>
@@ -378,26 +413,26 @@ function ProjectTaskModal({ task, onClose, onSave, allUsers }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
-        <h3 className="font-bold text-lg mb-4 text-slate-800">{task.id === 'new' ? 'Nouvelle Tâche de Projet' : 'Modifier la Tâche'}</h3>
-        <input className="w-full text-lg font-bold border-b border-slate-200 mb-4 outline-none pb-2 focus:border-indigo-500 transition-colors" value={title} onChange={e => setTitle(e.target.value)} placeholder="Titre..." />
+      <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200 border border-slate-100 dark:border-slate-700">
+        <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">{task.id === 'new' ? 'Nouvelle Tâche de Projet' : 'Modifier la Tâche'}</h3>
+        <input className="w-full text-lg font-bold border-b border-slate-200 dark:border-slate-700 mb-4 outline-none pb-2 focus:border-indigo-500 transition-colors bg-transparent dark:text-white" value={title} onChange={e => setTitle(e.target.value)} placeholder="Titre..." />
         <div className="mb-4">
-           <label className="text-xs font-bold text-slate-500 uppercase">Assigner à</label>
-           <select value={assignedTo} onChange={e => setAssignedTo(e.target.value)} className="w-full mt-1 p-2 border border-slate-200 rounded-lg bg-white outline-none focus:ring-1 focus:ring-indigo-500">
+           <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Assigner à</label>
+           <select value={assignedTo} onChange={e => setAssignedTo(e.target.value)} className="w-full mt-1 p-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-950 dark:text-white outline-none focus:ring-1 focus:ring-indigo-500">
              <option value="">Non assigné</option>
              {allUsers.map(u => <option key={u.id} value={u.id}>{u.displayName} {u.email ? `(${u.email})` : ''}</option>)}
            </select>
         </div>
         <div className="mb-4">
-             <label className="text-xs font-bold text-slate-500 uppercase">Échéance</label>
-             <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="w-full mt-1 text-sm p-2 border border-slate-200 bg-white rounded-lg outline-none focus:border-indigo-500" />
+             <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Échéance</label>
+             <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="w-full mt-1 text-sm p-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-white rounded-lg outline-none focus:border-indigo-500" />
         </div>
-        <div className="mb-4 border border-slate-200 rounded-lg overflow-hidden bg-white">
+        <div className="mb-4 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-white dark:bg-slate-950">
            <EditorToolbar />
-           <div ref={editorRef} contentEditable className="outline-none p-3 text-sm h-32 overflow-y-auto" suppressContentEditableWarning onInput={(e) => setDesc(e.currentTarget.innerHTML)} placeholder="Description détaillée..." />
+           <div ref={editorRef} contentEditable className="outline-none p-3 text-sm h-32 overflow-y-auto dark:text-slate-200" suppressContentEditableWarning onInput={(e) => setDesc(e.currentTarget.innerHTML)} placeholder="Description détaillée..." />
         </div>
         <div className="flex justify-end gap-2">
-           <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 font-bold hover:bg-slate-50 rounded-lg">Annuler</button>
+           <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">Annuler</button>
            <button onClick={handleSubmit} className="px-5 py-2 text-sm bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700">Enregistrer</button>
         </div>
       </div>
@@ -472,13 +507,13 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit, onMoveTask
 
   return (
     <div 
-      className={`flex flex-col rounded-2xl border transition-all duration-300 bg-white min-h-[500px] h-auto shadow-sm hover:shadow-md ${isDragOver ? 'ring-2 ring-indigo-400 bg-indigo-50/10' : config.borderColor}`}
+      className={`flex flex-col rounded-2xl border transition-all duration-300 bg-white dark:bg-slate-900 min-h-[500px] h-auto shadow-sm hover:shadow-md ${isDragOver ? 'ring-2 ring-indigo-400 bg-indigo-50/10' : config.borderColor}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       data-quadrant-id={config.id}
     >
-      <div className={`px-5 py-4 border-b border-slate-50 flex justify-between items-center ${config.headerColor}`}>
+      <div className={`px-5 py-4 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center ${config.headerColor}`}>
         <div className="flex items-center gap-3">
           <div className={`p-1.5 rounded-md ${config.color.replace('/50', '')}`}><Icon size={16} className={config.accentColor} /></div>
           <div><h3 className={`text-sm font-bold ${config.accentColor} tracking-wide uppercase`}>{config.title}</h3></div>
@@ -493,29 +528,29 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit, onMoveTask
             draggable="true" 
             onDragStart={(e) => handleDragStart(e, task.id)}
             onClick={() => onEdit(task)}
-            className={`group relative flex items-start gap-3 p-3 rounded-xl border transition-all ${task.isCompleted ? 'bg-slate-50 opacity-50 border-transparent' : `${config.taskBg} shadow-sm hover:shadow-md border`} active:cursor-grabbing`}
+            className={`group relative flex items-start gap-3 p-3 rounded-xl border transition-all ${task.isCompleted ? 'bg-slate-50 dark:bg-slate-800 opacity-50 border-transparent' : `${config.taskBg} shadow-sm hover:shadow-md border`} active:cursor-grabbing`}
           >
-            <div className="mt-1 text-slate-300 cursor-grab touch-none active:text-indigo-500" onTouchStart={(e) => handleTouchStart(e, task)} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}><GripVertical size={16} /></div>
-            <button onClick={(e) => onToggle(task, e)} className={`mt-0.5 shrink-0 transition-colors ${task.isCompleted ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-500'}`}>{task.isCompleted ? <CheckCircle2 size={18} /> : <div className="w-[18px] h-[18px] rounded-full border-[1.5px] border-current" />}</button>
+            <div className="mt-1 text-slate-300 dark:text-slate-600 cursor-grab touch-none active:text-indigo-500" onTouchStart={(e) => handleTouchStart(e, task)} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}><GripVertical size={16} /></div>
+            <button onClick={(e) => onToggle(task, e)} className={`mt-0.5 shrink-0 transition-colors ${task.isCompleted ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-500'}`}>{task.isCompleted ? <CheckCircle2 size={18} /> : <div className="w-[18px] h-[18px] rounded-full border-[1.5px] border-current dark:border-slate-500" />}</button>
             <div className="flex-1 min-w-0">
-              <span className={`block text-sm leading-tight ${task.isCompleted ? 'line-through text-slate-400' : 'text-slate-700 font-medium'}`}>{task.text}</span>
+              <span className={`block text-sm leading-tight ${task.isCompleted ? 'line-through text-slate-400 dark:text-slate-600' : 'text-slate-700 dark:text-slate-200 font-medium'}`}>{task.text}</span>
               <div className="flex items-center gap-3 mt-1.5">
-                {task.deadline && <div className={`flex items-center gap-1 text-[10px] font-medium ${new Date(task.deadline) < new Date() && !task.isCompleted ? 'text-red-500' : 'text-slate-500'}`}><CalendarIcon size={10} />{formatDate(task.deadline)}</div>}
-                {task.attachments?.length > 0 && <div className="flex items-center gap-1 text-[10px] font-medium text-indigo-500"><LinkIcon size={10} />{task.attachments.length} doc</div>}
+                {task.deadline && <div className={`flex items-center gap-1 text-[10px] font-medium ${new Date(task.deadline) < new Date() && !task.isCompleted ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}><CalendarIcon size={10} />{formatDate(task.deadline)}</div>}
+                {task.attachments?.length > 0 && <div className="flex items-center gap-1 text-[10px] font-medium text-indigo-500 dark:text-indigo-400"><LinkIcon size={10} />{task.attachments.length} doc</div>}
               </div>
             </div>
-            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity bg-white/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm">
-               <button onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md"><Edit2 size={12} /></button>
-               <button onClick={(e) => { e.stopPropagation(); onDelete(task.id); }} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md"><X size={12} /></button>
+            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm">
+               <button onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-md"><Edit2 size={12} /></button>
+               <button onClick={(e) => { e.stopPropagation(); onDelete(task.id); }} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md"><X size={12} /></button>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="p-3 border-t border-slate-50 bg-white">
+      <div className="p-3 border-t border-slate-50 dark:border-slate-800 bg-white dark:bg-slate-900">
         <button 
           onClick={handleInitiateAdd}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border-2 border-dashed border-slate-200 text-slate-400 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all text-sm font-bold"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-indigo-300 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-all text-sm font-bold"
         >
           <Plus size={18} /> Ajouter une tâche
         </button>
@@ -547,28 +582,28 @@ function CalendarView({ tasks, onToggle, onEdit }) {
   const totalSlots = [...blanks, ...days];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 h-[calc(100vh-8rem)] flex flex-col overflow-hidden">
-      <div className="flex items-center justify-between p-6 border-b border-slate-50">
-        <h3 className="text-lg font-bold text-slate-800 capitalize flex items-center gap-2"><CalendarDays className="text-indigo-600" />{monthName}</h3>
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 h-[calc(100vh-8rem)] flex flex-col overflow-hidden">
+      <div className="flex items-center justify-between p-6 border-b border-slate-50 dark:border-slate-800">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white capitalize flex items-center gap-2"><CalendarDays className="text-indigo-600 dark:text-indigo-400" />{monthName}</h3>
         <div className="flex gap-2">
-          <button onClick={prevMonth} className="p-2 hover:bg-slate-50 rounded-full transition-colors"><ChevronLeft size={20} className="text-slate-500" /></button>
-          <button onClick={nextMonth} className="p-2 hover:bg-slate-50 rounded-full transition-colors"><ChevronRight size={20} className="text-slate-500" /></button>
+          <button onClick={prevMonth} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors"><ChevronLeft size={20} className="text-slate-500 dark:text-slate-400" /></button>
+          <button onClick={nextMonth} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors"><ChevronRight size={20} className="text-slate-500 dark:text-slate-400" /></button>
         </div>
       </div>
-      <div className="grid grid-cols-7 border-b border-slate-50 bg-slate-50/50">
-        {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(d => <div key={d} className="py-3 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">{d}</div>)}
+      <div className="grid grid-cols-7 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+        {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(d => <div key={d} className="py-3 text-center text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{d}</div>)}
       </div>
       <div className="flex-1 grid grid-cols-7 auto-rows-fr overflow-y-auto">
         {totalSlots.map((day, index) => {
-          if (!day) return <div key={`blank-${index}`} className="bg-slate-50/20 border-b border-r border-slate-50" />;
+          if (!day) return <div key={`blank-${index}`} className="bg-slate-50/20 dark:bg-slate-800/20 border-b border-r border-slate-50 dark:border-slate-800" />;
           const dateString = new Date(year, month, day, 12).toISOString().split('T')[0];
           const dayTasks = tasksByDate[dateString] || [];
           return (
-            <div key={day} className="min-h-[100px] p-2 border-b border-r border-slate-50 hover:bg-slate-50/50 relative group">
-              <div className="text-xs font-bold mb-2 w-6 h-6 flex items-center justify-center rounded-full bg-indigo-50 text-indigo-600">{day}</div>
+            <div key={day} className="min-h-[100px] p-2 border-b border-r border-slate-50 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 relative group">
+              <div className="text-xs font-bold mb-2 w-6 h-6 flex items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300">{day}</div>
               <div className="space-y-1 overflow-y-auto max-h-[80px] custom-scrollbar">
                 {dayTasks.map(task => (
-                  <div key={task.id} onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="text-[10px] px-2 py-1 rounded-md border truncate cursor-pointer bg-white border-indigo-200 text-indigo-700 hover:bg-indigo-50" title={task.text}>{task.text}</div>
+                  <div key={task.id} onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="text-[10px] px-2 py-1 rounded-md border truncate cursor-pointer bg-white dark:bg-slate-800 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20" title={task.text}>{task.text}</div>
                 ))}
               </div>
             </div>
@@ -603,25 +638,25 @@ function ProjectCalendarView({ tasks, columns, onEdit, allUsers }) {
   const totalSlots = [...blanks, ...days];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex-1 flex flex-col overflow-hidden min-h-[500px]">
-      <div className="flex items-center justify-between p-4 border-b border-slate-50 bg-slate-50/50">
-        <h3 className="font-bold text-slate-800 capitalize flex items-center gap-2"><CalendarDays className="text-indigo-600" size={18} />{monthName}</h3>
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex-1 flex flex-col overflow-hidden min-h-[500px]">
+      <div className="flex items-center justify-between p-4 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+        <h3 className="font-bold text-slate-800 dark:text-white capitalize flex items-center gap-2"><CalendarDays className="text-indigo-600 dark:text-indigo-400" size={18} />{monthName}</h3>
         <div className="flex gap-2">
-          <button onClick={prevMonth} className="p-1.5 hover:bg-white rounded-full transition-colors border border-transparent hover:border-slate-200"><ChevronLeft size={18} className="text-slate-500" /></button>
-          <button onClick={nextMonth} className="p-1.5 hover:bg-white rounded-full transition-colors border border-transparent hover:border-slate-200"><ChevronRight size={18} className="text-slate-500" /></button>
+          <button onClick={prevMonth} className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"><ChevronLeft size={18} className="text-slate-500 dark:text-slate-400" /></button>
+          <button onClick={nextMonth} className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"><ChevronRight size={18} className="text-slate-500 dark:text-slate-400" /></button>
         </div>
       </div>
-      <div className="grid grid-cols-7 border-b border-slate-50 bg-slate-50/50">
-        {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(d => <div key={d} className="py-2 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">{d}</div>)}
+      <div className="grid grid-cols-7 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+        {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(d => <div key={d} className="py-2 text-center text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{d}</div>)}
       </div>
       <div className="flex-1 grid grid-cols-7 auto-rows-fr overflow-y-auto">
         {totalSlots.map((day, index) => {
-          if (!day) return <div key={`blank-${index}`} className="bg-slate-50/10 border-b border-r border-slate-50" />;
+          if (!day) return <div key={`blank-${index}`} className="bg-slate-50/10 dark:bg-slate-800/10 border-b border-r border-slate-50 dark:border-slate-800" />;
           const dateString = new Date(year, month, day, 12).toISOString().split('T')[0];
           const dayTasks = tasksByDate[dateString] || [];
           const isToday = new Date().toISOString().split('T')[0] === dateString;
           return (
-            <div key={day} className={`min-h-[100px] p-2 border-b border-r border-slate-50 hover:bg-slate-50/50 relative group ${isToday ? 'bg-indigo-50/10' : ''}`}>
+            <div key={day} className={`min-h-[100px] p-2 border-b border-r border-slate-50 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 relative group ${isToday ? 'bg-indigo-50/10 dark:bg-indigo-900/10' : ''}`}>
               <div className={`text-[10px] font-bold mb-1.5 w-5 h-5 flex items-center justify-center rounded-full ${isToday ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}>{day}</div>
               <div className="space-y-1.5 overflow-y-auto max-h-[120px] custom-scrollbar">
                 {dayTasks.map(task => {
@@ -631,7 +666,7 @@ function ProjectCalendarView({ tasks, columns, onEdit, allUsers }) {
                     <div key={task.id} onClick={(e) => { e.stopPropagation(); onEdit(task); }} className={`p-1.5 rounded-md border cursor-pointer hover:shadow-sm transition-all ${col.color} ${col.borderColor}`} title={task.text}>
                        <div className={`text-[10px] font-bold truncate ${col.accentColor}`}>{task.text}</div>
                        {assignedUser && (
-                         <div className="flex items-center gap-1 mt-1 text-[9px] text-slate-600 bg-white/60 px-1 rounded truncate">
+                         <div className="flex items-center gap-1 mt-1 text-[9px] text-slate-600 bg-white/60 dark:bg-slate-900/60 px-1 rounded truncate">
                             <UserCircle size={10} className="shrink-0" /> <span className="truncate">{assignedUser.displayName}</span>
                          </div>
                        )}
@@ -726,53 +761,53 @@ function MeetingMinutesView({ currentUser, userProfile, isAdmin }) {
     <div className="flex flex-col md:flex-row gap-6 h-[calc(100vh-8rem)] relative">
       {showDeleteConfirm && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/10 backdrop-blur-sm rounded-2xl">
-           <div className="bg-white p-6 rounded-xl shadow-xl border border-red-100 max-w-xs w-full animate-in zoom-in-95 duration-200">
+           <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-xl border border-red-100 dark:border-red-900 max-w-xs w-full animate-in zoom-in-95 duration-200">
               <div className="flex flex-col items-center gap-3 text-center">
-                 <div className="bg-red-100 p-3 rounded-full text-red-500"><AlertTriangle size={24} /></div>
-                 <h3 className="font-bold text-slate-800">Supprimer la note ?</h3>
+                 <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-full text-red-500 dark:text-red-400"><AlertTriangle size={24} /></div>
+                 <h3 className="font-bold text-slate-800 dark:text-white">Supprimer la note ?</h3>
                  <div className="flex gap-2 w-full">
-                    <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium">Annuler</button>
+                    <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-2 text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-sm font-medium">Annuler</button>
                     <button onClick={confirmDelete} className="flex-1 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm font-bold">Supprimer</button>
                  </div>
               </div>
            </div>
         </div>
       )}
-      <div className="w-full md:w-1/3 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex flex-col gap-4 bg-slate-50">
-          <div className="flex justify-between items-center"><h3 className="font-bold text-slate-700 flex items-center gap-2"><BookOpen size={18} className="text-indigo-600" /> Carnets</h3>{(canCreate || currentFolder === 'personal') && <button onClick={handleCreate} className="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg"><Plus size={16} /></button>}</div>
-          <div className="flex p-1 bg-slate-200/50 rounded-lg">
-            <button onClick={() => setCurrentFolder('team')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-bold rounded-md transition-all ${currentFolder === 'team' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}><Building2 size={12} /> IZIWUP</button>
-            <button onClick={() => setCurrentFolder('personal')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-bold rounded-md transition-all ${currentFolder === 'personal' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}><Lock size={12} /> Mes Notes</button>
+      <div className="w-full md:w-1/3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden shadow-sm">
+        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50">
+          <div className="flex justify-between items-center"><h3 className="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><BookOpen size={18} className="text-indigo-600 dark:text-indigo-400" /> Carnets</h3>{(canCreate || currentFolder === 'personal') && <button onClick={handleCreate} className="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg"><Plus size={16} /></button>}</div>
+          <div className="flex p-1 bg-slate-200/50 dark:bg-slate-700/50 rounded-lg">
+            <button onClick={() => setCurrentFolder('team')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-bold rounded-md transition-all ${currentFolder === 'team' ? 'bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}><Building2 size={12} /> IZIWUP</button>
+            <button onClick={() => setCurrentFolder('personal')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-bold rounded-md transition-all ${currentFolder === 'personal' ? 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}><Lock size={12} /> Mes Notes</button>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
           {minutes.map(m => (
-            <div key={m.id} onClick={() => handleSelect(m)} className={`p-3 rounded-xl border cursor-pointer transition-all ${selectedMinute?.id === m.id ? 'bg-indigo-50 border-indigo-200 ring-1 ring-indigo-200' : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-sm'}`}>
-              <div className="flex justify-between items-start mb-1"><span className="font-semibold text-sm text-slate-800 truncate flex-1 pr-2">{m.title}</span><span className="text-[10px] bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100 text-slate-500 whitespace-nowrap">{formatDate(m.date)}</span></div>
-              <p className="text-xs text-slate-500 line-clamp-2">{stripHtml(m.content) || "Nouvelle note..."}</p>
+            <div key={m.id} onClick={() => handleSelect(m)} className={`p-3 rounded-xl border cursor-pointer transition-all ${selectedMinute?.id === m.id ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-800 ring-1 ring-indigo-200 dark:ring-indigo-800' : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-sm'}`}>
+              <div className="flex justify-between items-start mb-1"><span className="font-semibold text-sm text-slate-800 dark:text-slate-200 truncate flex-1 pr-2">{m.title}</span><span className="text-[10px] bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 whitespace-nowrap">{formatDate(m.date)}</span></div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{stripHtml(m.content) || "Nouvelle note..."}</p>
             </div>
           ))}
         </div>
       </div>
-      <div className="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden shadow-sm relative">
-        {!selectedMinute ? <div className="flex-1 flex flex-col items-center justify-center text-slate-300"><p className="text-sm font-medium">Sélectionnez un document</p></div> : (
+      <div className="flex-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden shadow-sm relative">
+        {!selectedMinute ? <div className="flex-1 flex flex-col items-center justify-center text-slate-300 dark:text-slate-600"><p className="text-sm font-medium">Sélectionnez un document</p></div> : (
           <>
-            <div className="p-4 border-b border-slate-100 flex flex-col gap-3 bg-slate-50">
+            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-3 bg-slate-50 dark:bg-slate-800/50">
               <div className="flex justify-between items-center">
                 {isEditing ? (
-                  <div className="flex items-center gap-2 w-full"><input type="date" value={editDate} onChange={e => setEditDate(e.target.value)} className="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm outline-none focus:border-indigo-500" /><input type="text" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Titre..." className="flex-1 bg-white border border-slate-300 rounded-lg px-3 py-1 text-sm font-semibold outline-none focus:border-indigo-500" /></div>
+                  <div className="flex items-center gap-2 w-full"><input type="date" value={editDate} onChange={e => setEditDate(e.target.value)} className="bg-white dark:bg-slate-950 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-sm outline-none focus:border-indigo-500" /><input type="text" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Titre..." className="flex-1 bg-white dark:bg-slate-950 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1 text-sm font-semibold outline-none focus:border-indigo-500" /></div>
                 ) : (
-                  <div><h2 className="text-lg font-bold text-slate-800">{selectedMinute.title}</h2><p className="text-xs text-slate-500 flex items-center gap-1"><CalendarIcon size={12} /> {formatDate(selectedMinute.date)}</p></div>
+                  <div><h2 className="text-lg font-bold text-slate-800 dark:text-white">{selectedMinute.title}</h2><p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1"><CalendarIcon size={12} /> {formatDate(selectedMinute.date)}</p></div>
                 )}
                 <div className="flex gap-2 ml-4">
-                  {isEditing ? <><button onClick={() => setIsEditing(false)} className="p-2 text-slate-500 hover:bg-white rounded-lg"><X size={18} /></button><button onClick={handleSave} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-sm font-bold"><Save size={16} /> Enregistrer</button></> : canModify && <><button onClick={() => setShowDeleteConfirm(true)} className="flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm font-bold border border-red-100 transition-colors"><Trash2 size={16} /> Supprimer</button><button onClick={handleEdit} className="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium"><Edit2 size={16} /> Modifier</button></>}
+                  {isEditing ? <><button onClick={() => setIsEditing(false)} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 rounded-lg"><X size={18} /></button><button onClick={handleSave} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-sm font-bold"><Save size={16} /> Enregistrer</button></> : canModify && <><button onClick={() => setShowDeleteConfirm(true)} className="flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg text-sm font-bold border border-red-100 dark:border-red-900 transition-colors"><Trash2 size={16} /> Supprimer</button><button onClick={handleEdit} className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium"><Edit2 size={16} /> Modifier</button></>}
                 </div>
               </div>
               {isEditing && <EditorToolbar />}
             </div>
-            <div className="flex-1 overflow-y-auto p-6 bg-white relative">
-              {isEditing ? <div ref={editorRef} className="rich-text w-full h-full outline-none text-slate-700 text-sm leading-relaxed overflow-y-auto cursor-text" contentEditable suppressContentEditableWarning onInput={(e) => setEditContent(e.currentTarget.innerHTML)} /> : <div className="rich-text prose prose-sm max-w-none text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: selectedMinute.content || '<span class="text-slate-300 italic">Aucun contenu.</span>' }} />}
+            <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-slate-950 relative">
+              {isEditing ? <div ref={editorRef} className="rich-text w-full h-full outline-none text-slate-700 dark:text-slate-300 text-sm leading-relaxed overflow-y-auto cursor-text" contentEditable suppressContentEditableWarning onInput={(e) => setEditContent(e.currentTarget.innerHTML)} /> : <div className="rich-text prose prose-sm max-w-none text-slate-700 dark:text-slate-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: selectedMinute.content || '<span class="text-slate-300 dark:text-slate-600 italic">Aucun contenu.</span>' }} />}
             </div>
           </>
         )}
@@ -820,7 +855,7 @@ function ProjectBoard({ project, currentUser, allUsers }) {
   // --- NOUVELLES FONCTIONS COLONNES ---
   const handleAddColumn = async () => {
     const newId = 'col_' + Date.now();
-    const newCol = { id: newId, title: 'Nouvelle Colonne', color: 'bg-slate-100', borderColor: 'border-slate-200', accentColor: 'text-slate-600' };
+    const newCol = { id: newId, title: 'Nouvelle Colonne', color: 'bg-slate-100 dark:bg-slate-800', borderColor: 'border-slate-200 dark:border-slate-700', accentColor: 'text-slate-600 dark:text-slate-300' };
     await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_projects', project.id), {
       columns: [...columns, newCol]
     });
@@ -859,9 +894,9 @@ function ProjectBoard({ project, currentUser, allUsers }) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center mb-4">
-         <div className="flex bg-slate-200/50 p-1 rounded-lg">
-            <button onClick={() => setViewMode('kanban')} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-2 ${viewMode === 'kanban' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}><LayoutGrid size={14}/> Kanban</button>
-            <button onClick={() => setViewMode('calendar')} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-2 ${viewMode === 'calendar' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}><CalendarIcon size={14}/> Calendrier</button>
+         <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-lg">
+            <button onClick={() => setViewMode('kanban')} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-2 ${viewMode === 'kanban' ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><LayoutGrid size={14}/> Kanban</button>
+            <button onClick={() => setViewMode('calendar')} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-2 ${viewMode === 'calendar' ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><CalendarIcon size={14}/> Calendrier</button>
          </div>
       </div>
 
@@ -871,11 +906,11 @@ function ProjectBoard({ project, currentUser, allUsers }) {
             {columns.map((col) => (
               <div 
                 key={col.id} 
-                className="w-80 shrink-0 flex flex-col bg-slate-50 rounded-2xl border border-slate-200 h-full max-h-[calc(100vh-12rem)]"
+                className="w-80 shrink-0 flex flex-col bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 h-full max-h-[calc(100vh-12rem)]"
                 onDragOver={e => e.preventDefault()}
                 onDrop={e => handleDrop(e, col.id)}
               >
-                <div className={`p-4 border-b ${col.borderColor} flex justify-between items-center bg-white rounded-t-2xl group`}>
+                <div className={`p-4 border-b ${col.borderColor} flex justify-between items-center bg-white dark:bg-slate-800 rounded-t-2xl group`}>
                   {editingColId === col.id ? (
                     <input 
                       autoFocus
@@ -884,7 +919,7 @@ function ProjectBoard({ project, currentUser, allUsers }) {
                       onChange={e => setEditColTitle(e.target.value)} 
                       onBlur={() => saveColName(col.id)}
                       onKeyDown={e => e.key === 'Enter' && saveColName(col.id)}
-                      className="font-bold text-sm outline-none border-b-2 border-indigo-400 w-full mr-2 bg-transparent" 
+                      className="font-bold text-sm outline-none border-b-2 border-indigo-400 w-full mr-2 bg-transparent dark:text-white" 
                     />
                   ) : (
                     <h3 
@@ -896,21 +931,21 @@ function ProjectBoard({ project, currentUser, allUsers }) {
                   </h3>
                 )}
                 <div className="flex items-center gap-1 relative">
-                  <button onClick={() => setShowColorPickerFor(showColorPickerFor === col.id ? null : col.id)} className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-indigo-500 transition-opacity p-1" title="Changer la couleur">
+                  <button onClick={() => setShowColorPickerFor(showColorPickerFor === col.id ? null : col.id)} className="opacity-0 group-hover:opacity-100 text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-opacity p-1" title="Changer la couleur">
                     <Palette size={14} />
                   </button>
-                  <span className="text-xs bg-slate-100 px-2 py-1 rounded-full font-bold text-slate-600">{tasks.filter(t => t.status === col.id).length}</span>
+                  <span className="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-full font-bold text-slate-600 dark:text-slate-300">{tasks.filter(t => t.status === col.id).length}</span>
                   {tasks.filter(t => t.status === col.id).length === 0 && (
-                     <button onClick={() => deleteColumn(col.id)} className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 transition-opacity p-1" title="Supprimer la colonne vide"><Trash2 size={14}/></button>
+                     <button onClick={() => deleteColumn(col.id)} className="opacity-0 group-hover:opacity-100 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-opacity p-1" title="Supprimer la colonne vide"><Trash2 size={14}/></button>
                   )}
                   
                   {showColorPickerFor === col.id && (
-                    <div className="absolute right-0 top-full mt-2 bg-white border border-slate-200 shadow-xl rounded-xl p-2 z-10 flex gap-1.5 animate-in fade-in zoom-in-95">
+                    <div className="absolute right-0 top-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded-xl p-2 z-10 flex gap-1.5 animate-in fade-in zoom-in-95">
                       {COLOR_PALETTES.map(pal => (
                         <button 
                           key={pal.id} 
                           onClick={() => changeColColor(col.id, pal)}
-                          className={`w-5 h-5 rounded-full border border-slate-300 ${pal.color} hover:scale-110 transition-transform`}
+                          className={`w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 ${pal.color} hover:scale-110 transition-transform`}
                           title={pal.id}
                         />
                       ))}
@@ -925,29 +960,29 @@ function ProjectBoard({ project, currentUser, allUsers }) {
                       draggable 
                       onDragStart={e => handleDragStart(e, task.id)}
                       onClick={() => setEditingTask(task)}
-                      className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md cursor-pointer group"
+                      className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer group"
                     >
                       <div className="flex justify-between items-start mb-2">
-                         <span className="text-sm font-semibold text-slate-800">{task.text}</span>
+                         <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{task.text}</span>
                          {task.assignedTo && (
-                           <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-bold border border-indigo-200 shrink-0 ml-2" title={allUsers.find(u => u.id === task.assignedTo)?.displayName}>
+                           <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-[10px] font-bold border border-indigo-200 dark:border-indigo-800 shrink-0 ml-2" title={allUsers.find(u => u.id === task.assignedTo)?.displayName}>
                              {allUsers.find(u => u.id === task.assignedTo)?.displayName?.substring(0, 2).toUpperCase()}
                            </div>
                          )}
                       </div>
-                      {task.deadline && <div className="text-[10px] text-slate-400 flex items-center gap-1"><CalendarIcon size={10} /> {formatDate(task.deadline)}</div>}
+                      {task.deadline && <div className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1"><CalendarIcon size={10} /> {formatDate(task.deadline)}</div>}
                     </div>
                   ))}
                 </div>
                 <div className="p-3">
-                  <button onClick={() => addTask(col.id)} className="w-full py-2 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold text-xs hover:border-indigo-400 hover:text-indigo-600 transition-colors flex items-center justify-center gap-2"><Plus size={14}/> Ajouter</button>
+                  <button onClick={() => addTask(col.id)} className="w-full py-2 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400 dark:text-slate-500 font-bold text-xs hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center justify-center gap-2"><Plus size={14}/> Ajouter</button>
                 </div>
               </div>
             ))}
             <div className="w-80 shrink-0 flex flex-col h-full">
               <button 
                  onClick={handleAddColumn} 
-                 className="h-16 flex items-center justify-center gap-2 bg-slate-50/50 rounded-2xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all font-bold"
+                 className="h-16 flex items-center justify-center gap-2 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-all font-bold"
               >
                  <Plus size={18} /> Nouvelle colonne
               </button>
@@ -1003,8 +1038,8 @@ function ProjectsModule({ currentUser, allUsers, isAdmin }) {
     return (
       <div className="h-full flex flex-col">
         <div className="flex items-center gap-4 mb-4">
-          <button onClick={() => setSelectedProjectId(null)} className="text-slate-500 hover:text-indigo-600 flex items-center gap-1 text-sm font-bold"><ChevronLeft size={16} /> Retour aux projets</button>
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Briefcase size={20} className="text-indigo-600"/> {currentProject.title}</h2>
+          <button onClick={() => setSelectedProjectId(null)} className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 text-sm font-bold"><ChevronLeft size={16} /> Retour aux projets</button>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"><Briefcase size={20} className="text-indigo-600 dark:text-indigo-400"/> {currentProject.title}</h2>
         </div>
         <ProjectBoard project={currentProject} currentUser={currentUser} allUsers={allUsers} />
       </div>
@@ -1014,24 +1049,24 @@ function ProjectsModule({ currentUser, allUsers, isAdmin }) {
   return (
     <div className="h-full">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Projets d'équipe</h2>
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Projets d'équipe</h2>
       </div>
       
       {isCreating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4">
-          <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h3 className="font-bold text-lg text-slate-800 mb-4">Créer un nouveau projet</h3>
+          <div className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200 border border-slate-100 dark:border-slate-800">
+            <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-4">Créer un nouveau projet</h3>
             <input 
                autoFocus
                type="text" 
                value={newProjectTitle} 
                onChange={e => setNewProjectTitle(e.target.value)} 
                placeholder="Nom du projet (ex: Refonte Site Web)" 
-               className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6"
+               className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6"
                onKeyDown={e => e.key === 'Enter' && createProject()}
             />
             <div className="flex justify-end gap-3">
-              <button onClick={() => setIsCreating(false)} className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors">Annuler</button>
+              <button onClick={() => setIsCreating(false)} className="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">Annuler</button>
               <button onClick={createProject} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors">Créer</button>
             </div>
           </div>
@@ -1039,21 +1074,21 @@ function ProjectsModule({ currentUser, allUsers, isAdmin }) {
       )}
 
       {projects.length === 0 && !isCreating && (
-        <div className="text-center p-16 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-500 mt-8 max-w-3xl mx-auto">
-          <div className="bg-white w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100">
-            <Briefcase size={40} className="text-indigo-300" />
+        <div className="text-center p-16 bg-slate-50 dark:bg-slate-900 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 mt-8 max-w-3xl mx-auto">
+          <div className="bg-white dark:bg-slate-800 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 dark:border-slate-700">
+            <Briefcase size={40} className="text-indigo-300 dark:text-indigo-400" />
           </div>
-          <h3 className="text-2xl font-bold text-slate-700 mb-3">Aucun projet en cours</h3>
+          <h3 className="text-2xl font-bold text-slate-700 dark:text-slate-200 mb-3">Aucun projet en cours</h3>
           <p className="text-base mb-8 max-w-md mx-auto">Centralisez vos tâches et collaborez facilement avec votre équipe en créant votre premier projet Kanban.</p>
           {isAdmin ? (
             <button 
               onClick={() => setIsCreating(true)} 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 mx-auto shadow-lg shadow-indigo-200 transition-all hover:scale-105 hover:-translate-y-1"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 mx-auto shadow-lg shadow-indigo-200 dark:shadow-none transition-all hover:scale-105 hover:-translate-y-1"
             >
               <Plus size={28} /> Créer mon premier projet
             </button>
           ) : (
-            <p className="text-sm bg-amber-50 text-amber-700 p-3 rounded-lg border border-amber-200 inline-block">Seul un administrateur peut créer un projet.</p>
+            <p className="text-sm bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 p-3 rounded-lg border border-amber-200 dark:border-amber-800 inline-block">Seul un administrateur peut créer un projet.</p>
           )}
         </div>
       )}
@@ -1063,9 +1098,9 @@ function ProjectsModule({ currentUser, allUsers, isAdmin }) {
           {isAdmin && (
              <div 
                onClick={() => setIsCreating(true)} 
-               className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-slate-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 cursor-pointer transition-all min-h-[160px] group shadow-sm hover:shadow-md"
+               className="bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 cursor-pointer transition-all min-h-[160px] group shadow-sm hover:shadow-md"
              >
-               <div className="bg-white p-4 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform border border-slate-100">
+               <div className="bg-white dark:bg-slate-800 p-4 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform border border-slate-100 dark:border-slate-700">
                  <Plus size={32} className="text-current" />
                </div>
                <span className="font-bold text-base">Nouveau Projet</span>
@@ -1073,13 +1108,13 @@ function ProjectsModule({ currentUser, allUsers, isAdmin }) {
           )}
           
           {projects.map(p => (
-            <div key={p.id} onClick={() => setSelectedProjectId(p.id)} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md cursor-pointer transition-all group relative min-h-[160px] flex flex-col">
+            <div key={p.id} onClick={() => setSelectedProjectId(p.id)} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md cursor-pointer transition-all group relative min-h-[160px] flex flex-col">
                <div className="flex items-center justify-between mb-4">
-                 <div className="bg-indigo-100 p-3 rounded-xl"><Briefcase size={24} className="text-indigo-600" /></div>
-                 {isAdmin && <button onClick={(e) => deleteProject(p.id, e)} className="text-slate-300 hover:text-red-500 p-2"><Trash2 size={16} /></button>}
+                 <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-xl"><Briefcase size={24} className="text-indigo-600 dark:text-indigo-400" /></div>
+                 {isAdmin && <button onClick={(e) => deleteProject(p.id, e)} className="text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 p-2"><Trash2 size={16} /></button>}
                </div>
-               <h3 className="font-bold text-lg text-slate-800 mb-1 flex-1">{p.title}</h3>
-               <p className="text-xs text-slate-500 mt-auto">Créé le {p.createdAt ? formatDate(p.createdAt.toDate()) : 'Récemment'}</p>
+               <h3 className="font-bold text-lg text-slate-800 dark:text-slate-200 mb-1 flex-1">{p.title}</h3>
+               <p className="text-xs text-slate-500 dark:text-slate-500 mt-auto">Créé le {p.createdAt ? formatDate(p.createdAt.toDate()) : 'Récemment'}</p>
             </div>
           ))}
         </div>
@@ -1139,23 +1174,14 @@ function MainApp() {
   const isAdmin = isUserAdmin(user);
 
   useEffect(() => { const script = document.createElement('script'); script.src = "https://cdn.tailwindcss.com"; document.head.appendChild(script); }, []);
-  
-  // --- VERIFICATION DES DROITS À LA CONNEXION ---
   useEffect(() => { 
     const unsubscribe = onAuthStateChanged(auth, async u => { 
       if (u) {
-        // Est-il admin ou l'email finit-il par @iziwup.com ?
         let isAllowed = u.isAnonymous || (u.email && u.email.toLowerCase().endsWith('@iziwup.com'));
-        
-        // Si non, on regarde s'il faisait DEJA partie de la base de données avant (les anciens)
         if (!isAllowed) {
           const userDoc = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_users', u.uid));
-          if (userDoc.exists()) {
-             isAllowed = true;
-          }
+          if (userDoc.exists()) isAllowed = true;
         }
-
-        // S'il n'est toujours pas autorisé, on le bloque.
         if (!isAllowed) {
           await signOut(auth);
           setAuthError("Accès refusé. Seules les adresses @iziwup.com sont autorisées.");
@@ -1163,7 +1189,6 @@ function MainApp() {
           setLoading(false);
           return;
         }
-
         setAuthError('');
         setUser(u); 
         setViewedUserId(u.uid); 
@@ -1174,7 +1199,6 @@ function MainApp() {
     }); 
     return () => unsubscribe(); 
   }, []);
-
   useEffect(() => { if (user) { const unsubscribe = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'team_users', user.uid), s => setMyProfile(s.exists() ? s.data() : null)); return () => unsubscribe(); } }, [user]);
   useEffect(() => { if (user) { const unsubscribe = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'team_users'), s => setAllUsers(s.docs.map(d => ({ id: d.id, ...d.data() })))); return () => unsubscribe(); } }, [user]);
 
@@ -1193,11 +1217,11 @@ function MainApp() {
     setUser(null);
   };
 
-  if (loading) return <div className="flex h-screen items-center justify-center text-slate-400 font-sans text-sm animate-pulse">Chargement Izitask...</div>;
+  if (loading) return <div className="flex h-screen items-center justify-center text-slate-400 font-sans text-sm animate-pulse dark:bg-slate-950">Chargement Izitask...</div>;
   if (!user || !myProfile) return <LoginScreen onJoin={handleJoinTeam} auth={auth} user={user} externalError={authError} />;
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 font-sans flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans flex flex-col antialiased selection:bg-indigo-100 dark:selection:bg-indigo-900">
       <style>{`
         .rich-text ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 0.5em; }
         .rich-text ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 0.5em; }
@@ -1213,40 +1237,46 @@ function MainApp() {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; border: 2px solid transparent; background-clip: content-box; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+        @media (prefers-color-scheme: dark) {
+          .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #475569; }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #64748b; }
+          .rich-text a { color: #818cf8; }
+          .rich-text blockquote { border-left-color: #475569; color: #94a3b8; }
+        }
       `}</style>
 
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 px-6 py-3 border-b border-slate-100">
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-30 px-6 py-3 border-b border-slate-100 dark:border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="bg-indigo-600 p-1.5 rounded-lg shadow-sm shadow-indigo-200"><Zap className="text-white w-4 h-4 fill-current" /></div>
-            <h1 className="text-lg font-bold text-slate-900 tracking-tight">Izitask</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Izitask</h1>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
-            <div className="flex bg-slate-100/50 p-1 rounded-lg border border-slate-100">
-              <button onClick={() => setCurrentView('matrix')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'matrix' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}><LayoutGrid size={14}/> Matrice</button>
-              <button onClick={() => setCurrentView('calendar')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'calendar' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}><CalendarIcon size={14}/> Calendrier</button>
-              <button onClick={() => setCurrentView('minutes')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'minutes' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}><BookOpen size={14}/> C.R.</button>
-              <button onClick={() => setCurrentView('projects')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'projects' ? 'bg-white shadow text-slate-800' : 'text-slate-500'}`}><Briefcase size={14}/> Projets</button>
+            <div className="flex bg-slate-100/50 dark:bg-slate-800/50 p-1 rounded-lg border border-slate-100 dark:border-slate-800">
+              <button onClick={() => setCurrentView('matrix')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'matrix' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><LayoutGrid size={14}/> Matrice</button>
+              <button onClick={() => setCurrentView('calendar')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'calendar' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><CalendarIcon size={14}/> Calendrier</button>
+              <button onClick={() => setCurrentView('minutes')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'minutes' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><BookOpen size={14}/> C.R.</button>
+              <button onClick={() => setCurrentView('projects')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'projects' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><Briefcase size={14}/> Projets</button>
             </div>
             {currentView !== 'projects' && (
               <div className="flex items-center gap-2">
                 {isAdmin ? (
                    <div className="relative group">
-                     <select value={viewedUserId || ''} onChange={e => setViewedUserId(e.target.value)} className="appearance-none bg-transparent pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 cursor-pointer focus:outline-none transition-colors">
-                       <option value={user.uid}>Mon Espace</option>
+                     <select value={viewedUserId || ''} onChange={e => setViewedUserId(e.target.value)} className="appearance-none bg-transparent pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer focus:outline-none transition-colors">
+                       <option value={user.uid} className="dark:bg-slate-900">Mon Espace</option>
                        {allUsers.filter(u => u.id !== user.uid).map(u => (
-                         <option key={u.id} value={u.id}>
+                         <option key={u.id} value={u.id} className="dark:bg-slate-900">
                            {u.displayName} {u.email ? `(${u.email})` : ''}
                          </option>
                        ))}
                      </select>
-                     <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"><ChevronRight className="w-3 h-3 text-slate-400 rotate-90" /></div>
+                     <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"><ChevronRight className="w-3 h-3 text-slate-400 dark:text-slate-500 rotate-90" /></div>
                    </div>
-                ) : <span className="text-xs font-bold text-slate-500">Mon Espace</span>}
-                <div className="h-7 w-7 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-[10px] border border-indigo-100">{myProfile.displayName.substring(0, 2).toUpperCase()}</div>
+                ) : <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Mon Espace</span>}
+                <div className="h-7 w-7 rounded-full bg-indigo-50 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-bold text-[10px] border border-indigo-100 dark:border-indigo-800">{myProfile.displayName.substring(0, 2).toUpperCase()}</div>
               </div>
             )}
-            <button onClick={handleLogout} className="text-slate-300 hover:text-red-500 transition-colors" title="Déconnexion"><LogOut size={16}/></button>
+            <button onClick={handleLogout} className="text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="Déconnexion"><LogOut size={16}/></button>
           </div>
         </div>
       </header>
