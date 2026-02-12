@@ -40,7 +40,6 @@ const ADMIN_EMAILS = [
 
 const isUserAdmin = (user) => {
   if (!user) return false;
-  // Déblocage des droits d'admin pour le mode TEST
   if (user.isAnonymous) return true; 
   if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) return true;
   return false;
@@ -611,7 +610,7 @@ function CalendarView({ tasks, onToggle, onEdit }) {
               <div className="text-xs font-bold mb-2 w-6 h-6 flex items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300">{day}</div>
               <div className="space-y-1 overflow-y-auto max-h-[80px] custom-scrollbar">
                 {dayTasks.map(task => (
-                  <div key={task.id} onClick={(e) => { e.stopPropagation(); onEdit(task); }} className="text-[10px] px-2 py-1 rounded-md border truncate cursor-pointer bg-white dark:bg-slate-800 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20" title={task.text}>{task.text}</div>
+                  <div key={task.id} onClick={(e) => { e.stopPropagation(); onEdit(task); }} className={`text-[10px] px-2 py-1 rounded-md border truncate cursor-pointer transition-colors ${task.isCompleted ? 'bg-emerald-100 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-400 line-through' : 'bg-white dark:bg-slate-800 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'}`} title={task.text}>{task.text}</div>
                 ))}
               </div>
             </div>
@@ -1262,7 +1261,7 @@ function MainApp() {
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
             <div className="flex bg-slate-100/50 dark:bg-slate-800/50 p-1 rounded-lg border border-slate-100 dark:border-slate-800">
               <button onClick={() => setCurrentView('matrix')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'matrix' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><LayoutGrid size={14}/> Matrice</button>
-              <button onClick={() => setCurrentView('calendar')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'calendar' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><CalendarIcon size={14}/> Calendrier</button>
+              <button onClick={() => setCurrentView('calendar')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'calendar' ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><CalendarIcon size={14}/> Calendrier</button>
               <button onClick={() => setCurrentView('minutes')} className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${currentView === 'minutes' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><BookOpen size={14}/> C.R.</button>
               <button onClick={() => setCurrentView('projects')} className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${currentView === 'projects' ? 'bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}><Briefcase size={14}/> Projets</button>
             </div>
@@ -1288,7 +1287,7 @@ function MainApp() {
           </div>
         </div>
       </header>
-      <main className="flex-1 max-w-full md:max-w-7xl mx-auto p-4 md:p-6 w-full">
+      <main className="flex-1 w-full max-w-full overflow-hidden p-6">
         {currentView === 'projects' ? <ProjectsModule currentUser={user} allUsers={allUsers} isAdmin={isAdmin} /> : 
          currentView === 'minutes' ? <MeetingMinutesView currentUser={user} userProfile={myProfile} isAdmin={isAdmin} /> : 
          <DataManager currentUser={user} viewedUserId={viewedUserId} currentView={currentView} allUsers={allUsers} />
