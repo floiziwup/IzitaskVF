@@ -40,6 +40,7 @@ const ADMIN_EMAILS = [
 
 const isUserAdmin = (user) => {
   if (!user) return false;
+  // Déblocage des droits d'admin pour le mode TEST
   if (user.isAnonymous) return true; 
   if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) return true;
   return false;
@@ -507,7 +508,7 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit, onMoveTask
 
   return (
     <div 
-      className={`flex flex-col rounded-2xl border transition-all duration-300 bg-white dark:bg-slate-900 min-h-[500px] h-auto shadow-sm hover:shadow-md ${isDragOver ? 'ring-2 ring-indigo-400 bg-indigo-50/10' : config.borderColor}`}
+      className={`flex flex-col rounded-2xl border transition-all duration-300 bg-white dark:bg-slate-900 min-h-[500px] h-auto shadow-sm hover:shadow-md overflow-hidden ${isDragOver ? 'ring-2 ring-indigo-400 bg-indigo-50/10' : config.borderColor}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -522,6 +523,13 @@ function Quadrant({ config, tasks, onAdd, onDelete, onToggle, onEdit, onMoveTask
       </div>
 
       <div className="flex-1 p-4 space-y-2">
+        {tasks.length === 0 && (
+          <div className="h-40 flex flex-col items-center justify-center text-slate-300 dark:text-slate-600 gap-2 pointer-events-none">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-full"><Icon size={24} className="opacity-20" /></div>
+            <p className="text-xs font-medium">{config.desc}</p>
+          </div>
+        )}
+        
         {tasks.map(task => (
           <div 
             key={task.id} 
