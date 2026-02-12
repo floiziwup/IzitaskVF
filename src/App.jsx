@@ -40,8 +40,9 @@ const ADMIN_EMAILS = [
 
 const isUserAdmin = (user) => {
   if (!user) return false;
+  // Déblocage des droits d'admin pour le mode TEST
+  if (user.isAnonymous) return true; 
   if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) return true;
-  if (user.isAnonymous && user.displayName === 'Florent (Test)') return true;
   return false;
 };
 
@@ -128,7 +129,7 @@ function LoginScreen({ onJoin, auth, user, externalError }) {
 
   useEffect(() => {
     if (user && user.displayName && !externalError) {
-      onJoin(user.displayName, user.uid, user.email); // CORRECTION : On passe l'email ici
+      onJoin(user.displayName, user.uid, user.email); 
     }
   }, [user, externalError]);
 
@@ -180,7 +181,7 @@ function LoginScreen({ onJoin, auth, user, externalError }) {
   );
 }
 
-// 3. Modale Tâche (Matrice)
+// 3. Modale Tâche
 function TaskModal({ task, onClose, onSave, allUsers }) {
   const [title, setTitle] = useState(task.text || '');
   const [desc, setDesc] = useState(task.description || '');
@@ -214,6 +215,7 @@ function TaskModal({ task, onClose, onSave, allUsers }) {
   const handleSubmit = () => {
     const contentToSave = editorRef.current ? editorRef.current.innerHTML : desc;
     
+    // Logique de délégation
     if (delegateTo) {
       onSave(task.id, { 
         text: title, 
@@ -779,7 +781,7 @@ function MeetingMinutesView({ currentUser, userProfile, isAdmin }) {
   );
 }
 
-// 9. ProjectBoard (Kanban)
+// 8. ProjectBoard (Kanban)
 function ProjectBoard({ project, currentUser, allUsers }) {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
